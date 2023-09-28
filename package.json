@@ -1,14 +1,15 @@
 {
-  "name": "@solenopsys/vite-federation-entry",
+  "name": "@solenopsys/federation-runtime",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "Vite plugin to create a federated entry point",
-  "main": "index.ts",
-  "dependencies": {
+  "main": "src/index.js",
+    "dependencies": {
     "zone.js": "^0.13.1"
   },
   "scripts": {
-    "build": "esbuild index.ts --bundle --outfile=out.js --format=esm"
+    "build": " esbuild ./src/index.ts --bundle  --platform=node --outfile=dist/index.js --packages=external && cp package.json dist/package.json",
+    "pub": "pnpm build && pnpm publish dist --no-git-checks --access=public"
   },
   "devDependencies": {
     "esbuild": "^0.18.17"
