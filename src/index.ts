@@ -10,14 +10,14 @@ let devLoader = (pt:string)=>{
 };
 
 let staticLoader = (pt:string)=>{
-    return  "/dist" + pt + "/index.js"
+    return  "/dist/modules" + pt + "/index.js"
 };
 
 
 const moduleLoader = new ModulesController(importInjector,devLoader);
 
 // @ts-ignore
-const projectName="solenopsys/bs-auth" // import.meta.env.MODE;
+const projectName=  import.meta.env.MODE;
 console.log("ENTRY",projectName);
 const path = `/bootstraps/${projectName}`;
 const entryPath=`${path}/entry.json`;
