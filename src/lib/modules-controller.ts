@@ -1,4 +1,6 @@
-import {ImportMapInjector} from "./import-map-injector";
+import {ImportMap, ImportMapInjector} from "./import-map-injector";
+import {fetchJsonObject} from "./config-loader";
+
 
 export class ModulesController {
     private modules: { [name: string]: any } = {};
@@ -6,13 +8,13 @@ export class ModulesController {
 
     }
 
-    public addModule(name: string) {
+    public async   addModule(name: string) {
 
         const modName=name.replace("@","")
-        const path = `/modules/${modName}/index.js`;
+        const path = `/modules/${modName}/importmap.json`;
+        let importMapObj:ImportMap = await fetchJsonObject(path);
 
-
-        this.importInjector.addModule(name, path);
+        this.importInjector.joinImportMap(importMapObj);
         this.importInjector.injectMap()
 
 

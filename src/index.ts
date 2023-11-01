@@ -29,8 +29,8 @@ async function  init(){
     const entry=await fetchJsonData(entryPath)
     const modName = entry.layout.module;
     const moduleLoader = new ModulesController(importInjector);
-    const addModule= (name: string) => {
-        return moduleLoader.addModule(name);
+    const addModule= async (name: string) => {
+        return await moduleLoader.addModule(name);
     }
 
     const module= await moduleLoader.addModule(modName)

@@ -25,7 +25,16 @@ export class ImportMapInjector {
         im.textContent = JSON.stringify(this.importMap);
     }
 
-    public addModule(name: string, path: string) {
+    public joinImportMap(newMap: ImportMap) {
+        for (const key in newMap.imports) {
+            this.importMap.imports[key] = newMap.imports[key];
+        }
+        for (const key in newMap.scopes) {
+            this.importMap.scopes[key] = newMap.scopes[key];
+        }
+    }
+
+    public addImports(name: string, path: string) {
         this.importMap.imports[name] = path;
     }
 }
