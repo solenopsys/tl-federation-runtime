@@ -5,22 +5,17 @@ import {ModulesController} from "./lib/modules-controller";
 const importInjector = new ImportMapInjector(document);
 
 
-function loadModulesMapping(){
-    return fetchModules("/modules.json");
-}
 
 
+let entryPath="/entry.json"
 
 // @ts-ignore
-const projectName=  import.meta.env.MODE;
-console.log("ENTRY",projectName);
-const path = `/bootstraps/${projectName}`;
-const entryPath=`${path}/entry.json`;
-
-
-
-
-
+const projectName=  import.meta.env?.MODE;
+if (projectName!==undefined){
+    console.log("ENTRY",projectName);
+    const path = `/bootstraps/${projectName}`;
+     entryPath=`${path}${entryPath}`;
+}
 
 function injectFavicon(url: string) {
     const favicon = document.createElement('link');
@@ -31,10 +26,9 @@ function injectFavicon(url: string) {
 }
 
 async function  init(){
-    const modulesMapping=await loadModulesMapping();
     const entry=await fetchJsonData(entryPath)
     const modName = entry.layout.module;
-    const moduleLoader = new ModulesController(importInjector,modulesMapping);
+    const moduleLoader = new ModulesController(importInjector);
     const addModule= (name: string) => {
         return moduleLoader.addModule(name);
     }

@@ -2,15 +2,17 @@ import {ImportMapInjector} from "./import-map-injector";
 
 export class ModulesController {
     private modules: { [name: string]: any } = {};
-    constructor(private importInjector: ImportMapInjector,private mapping: {[key:string]:string}) {
+    constructor(private importInjector: ImportMapInjector ) {
 
     }
 
     public addModule(name: string) {
 
-        let modName = this.mapping[name] ;
+        const modName=name.replace("@","")
+        const path = `/modules/${modName}/index.js`;
 
-        this.importInjector.addModule(name, modName);
+
+        this.importInjector.addModule(name, path);
         this.importInjector.injectMap()
 
 
@@ -18,7 +20,7 @@ export class ModulesController {
             console.log("MODULE ALREADY LOADED",name)
             return Promise.resolve(this.modules[name]);
         }else{
-            let promise = import( modName );
+            let promise = import( path );
             promise.then((module)=>{
                 this.registerModule(name,module);
             })
