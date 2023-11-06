@@ -11,7 +11,8 @@ let entryPath="/entry.json"
 
 // @ts-ignore
 const projectName=  import.meta.env?.MODE;
-if (projectName!==undefined){
+const devMode=projectName!==undefined
+if (devMode){
     console.log("ENTRY",projectName);
     const path = `/bootstraps/${projectName}`;
      entryPath=`${path}${entryPath}`;
@@ -30,10 +31,10 @@ async function  init(){
     const modName = entry.layout.module;
     const moduleLoader = new ModulesController(importInjector);
     const addModule= async (name: string) => {
-        return await moduleLoader.addModule(name);
+        return await moduleLoader.addModule(name,devMode);
     }
 
-    const module= await moduleLoader.addModule(modName)
+    const module= await moduleLoader.addModule(modName,devMode)
 
     let layoutConf:{ title: string,logo:string,favicon:string } = entry.layout.data;
     const  mapping: { [name: string]: {module:string,data:any} } = {};

@@ -9,15 +9,20 @@ export class ModulesController {
 
     }
 
-    public async addModule(name: string) {
+    public async addModule(name: string,devMode=false) {
 
         const modName = name.replace("@", "")
-        const importMapPatch = `/modules/${modName}/importmap.json`;
-        const pathScript = `/modules/${modName}/index.js`;
-        let importMapObj: ImportMap = await fetchJsonObject(importMapPatch);
 
-        this.importInjector.joinImportMap(importMapObj);
-        this.importInjector.injectMap()
+        const indexFile =devMode?"src/index.ts":"index.js";
+        const pathScript = `/modules/${modName}/${indexFile}`;
+
+        if(!devMode) {
+            const importMapPatch = `/modules/${modName}/importmap.json`;
+            let importMapObj: ImportMap = await fetchJsonObject(importMapPatch);
+
+            this.importInjector.joinImportMap(importMapObj);
+            this.importInjector.injectMap()
+        }
 
 
         if (this.modules[name]) {
