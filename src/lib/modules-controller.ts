@@ -4,29 +4,31 @@ import {fetchJsonObject} from "./config-loader";
 
 export class ModulesController {
     private modules: { [name: string]: any } = {};
-    constructor(private importInjector: ImportMapInjector ) {
+
+    constructor(private importInjector: ImportMapInjector) {
 
     }
 
-    public async   addModule(name: string) {
+    public async addModule(name: string) {
 
-        const modName=name.replace("@","")
-        const path = `/modules/${modName}/importmap.json`;
-        let importMapObj:ImportMap = await fetchJsonObject(path);
+        const modName = name.replace("@", "")
+        const importMapPatch = `/modules/${modName}/importmap.json`;
+        const pathScript = `/modules/${modName}/index.js`;
+        let importMapObj: ImportMap = await fetchJsonObject(importMapPatch);
 
         this.importInjector.joinImportMap(importMapObj);
         this.importInjector.injectMap()
 
 
-        if(this.modules[name]){
-            console.log("MODULE ALREADY LOADED",name)
+        if (this.modules[name]) {
+            console.log("MODULE ALREADY LOADED", name)
             return Promise.resolve(this.modules[name]);
-        }else{
-            let promise = import( path );
-            promise.then((module)=>{
-                this.registerModule(name,module);
-            })
-            return promise
+        } else {
+            let module = await import( pathScript );
+
+            this.registerModule(name, module);
+
+            return module
         }
 
     }
