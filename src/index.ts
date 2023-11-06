@@ -43,7 +43,13 @@ async function  init(){
         mapping[key.substring(1)] = entry.routes[key];
     }
 
+
+
     document.title = layoutConf.title;
+    if(devMode){
+        layoutConf.logo=`/bootstraps/${projectName}/${layoutConf.logo}`
+        layoutConf.favicon=`/bootstraps/${projectName}/${layoutConf.favicon}`
+    }
     injectFavicon(layoutConf.favicon);
 
     module.ENTRY.bootstrap().then((mod) => {
